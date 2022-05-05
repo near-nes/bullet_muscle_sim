@@ -1,6 +1,6 @@
+import arm_1dof.robot_arm_1dof
+import pybullet
 from tokenize import String
-import pybullet 
-import robot_arm_1dof
 
 import os
 

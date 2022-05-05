@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from bullet_arm_1dof import BulletArm1Dof
-from robot_arm_1dof import RobotArm1Dof
+from arm_1dof.bullet_arm_1dof import BulletArm1Dof
+from arm_1dof.robot_arm_1dof import RobotArm1Dof
 
 import pybullet
 
