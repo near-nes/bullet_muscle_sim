@@ -33,11 +33,11 @@ class BulletArm1Dof:
         self._timestep = pybullet.getPhysicsEngineParameters(physicsClientId=self._server_id)['fixedTimeStep']
 
 
-    def LoadRobot(self, robot_sdf_filename=URDF_MODEL_FILENAME) -> robot_arm_1dof.RobotArm1Dof:
+    def LoadRobot(self, robot_sdf_filename=URDF_MODEL_FILENAME) -> arm_1dof.robot_arm_1dof.RobotArm1Dof:
         """Load robot from sdf file"""
         self._skel_arm_id = pybullet.loadURDF(fileName=robot_sdf_filename, useFixedBase=True, physicsClientId=self._server_id)
 
-        self._skel_arm = robot_arm_1dof.RobotArm1Dof(bullet_ctrl=self, bullet_body_id=self._skel_arm_id)
+        self._skel_arm = arm_1dof.robot_arm_1dof.RobotArm1Dof(bullet_ctrl=self, bullet_body_id=self._skel_arm_id)
 
         return self._skel_arm
 
