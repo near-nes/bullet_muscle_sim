@@ -45,6 +45,7 @@ class RobotArm1Dof:
             physicsClientId=self._bullet_ctrl.server_id)
 
         self._ee_link_state = pybullet.getLinkState(self._body_id, RobotArm1Dof.HAND_LINK_ID, \
+            computeLinkVelocity=True,
             physicsClientId=self._bullet_ctrl.server_id)
 
     def JointPos(self, joint_id) -> float:
@@ -63,8 +64,8 @@ class RobotArm1Dof:
         """Get end effector vel, linear and angular"""
         return (self._ee_link_state[6], self._ee_link_state[7])
 
-    def SetJointTorque(self, joint_ids, torques) -> None:
-        """Sets torque applied to specified joint"""
-        pybullet.setJointMotorControl2(self._body_id, joint_ids, \
+    def SetJointTorques(self, joint_ids, torques) -> None:
+        """Sets torques applied to specified joints."""
+        pybullet.setJointMotorControlArray(self._body_id, jointIndices=joint_ids, \
             controlMode=pybullet.TORQUE_CONTROL, forces=torques, \
             physicsClientId=self._bullet_ctrl.server_id)
