@@ -30,6 +30,16 @@ class RobotArm1Dof:
             physicsClientId=self._bullet_ctrl.server_id)
         self._lower_arm_mass = dyn_info[1]
 
+        # Disable position and velocity based joint motor controls
+        pybullet.setJointMotorControlArray(self._body_id, jointIndices=[RobotArm1Dof.SHOULDER_A_JOINT_ID, RobotArm1Dof.ELBOW_JOINT_ID], \
+            controlMode=pybullet.POSITION_CONTROL, forces=[0.0, 0.0], \
+            physicsClientId=self._bullet_ctrl.server_id)
+
+        pybullet.setJointMotorControlArray(self._body_id, jointIndices=[RobotArm1Dof.SHOULDER_A_JOINT_ID, RobotArm1Dof.ELBOW_JOINT_ID], \
+            controlMode=pybullet.VELOCITY_CONTROL, forces=[0.0, 0.0], \
+            physicsClientId=self._bullet_ctrl.server_id)
+
+        # Initialize joint/link state storage
         self._joint_stats = {}
         self._ee_link_state = None
 
