@@ -2,7 +2,7 @@ import arm_1dof.robot_arm_1dof
 import arm_1dof.robot_arm_muscle_1dof
 import pybullet
 from tokenize import String
-from MuscleModelPython import MUSCLE_INDEX, JOINT_INDEX
+# from MuscleModelPython import MUSCLE_INDEX, JOINT_INDEX
 
 import os
 

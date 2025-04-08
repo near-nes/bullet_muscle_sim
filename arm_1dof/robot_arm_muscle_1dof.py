@@ -2,7 +2,7 @@ from ntpath import join
 import numpy as np
 from pandas import array
 import pybullet
-from MuscleModelPython import TwoMuscleModel, MUSCLE_INDEX
+# from MuscleModelPython import TwoMuscleModel, MUSCLE_INDEX
 
 class RobotArmMuscle1Dof:
     """Sekeleton arm bullet body"""
