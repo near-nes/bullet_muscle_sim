@@ -1,10 +1,10 @@
+import os
+
 import arm_1dof.robot_arm_1dof
 import arm_1dof.robot_arm_muscle_1dof
 import pybullet
-from tokenize import String
-# from MuscleModelPython import MUSCLE_INDEX, JOINT_INDEX
+import numpy as np
 
-import os
 
 class BulletArm1Dof:
     """Class to initialize pybullet server and load robot"""
@@ -13,6 +13,7 @@ class BulletArm1Dof:
     SDF_MODEL_NAME="demo_human_col"
     SDF_MODEL_FILENAME="/".join([SDF_MODEL_NAME, "skeleton.sdf"])
     URDF_MODEL_FILENAME="/".join([SDF_MODEL_NAME, "skeleton.urdf"])
+    PLANE_MODEL_FILENAME="/".join([SDF_MODEL_NAME, "plane.urdf"])
 
     def __init__(self) -> None:
         self._server_id = -1
@@ -35,6 +36,26 @@ class BulletArm1Dof:
 
         self._timestep = pybullet.getPhysicsEngineParameters(physicsClientId=self._server_id)['fixedTimeStep']
 
+
+    def LoadPlane(self, robot_sdf_filename=PLANE_MODEL_FILENAME):
+        """Load plane from sdf file"""
+        plane_id = pybullet.loadURDF(fileName=robot_sdf_filename, useFixedBase=True, physicsClientId=self._server_id)
+        # Define new position (x, y, z)
+        new_position = [0, 10, 10]  # Change as needed
+
+        # Create rotation quaternion for 90 degrees around Z-axis
+        # For other axes: X-axis = [1,0,0], Y-axis = [0,1,0], Z-axis = [0,0,1]
+        rotation_quaternion = pybullet.getQuaternionFromEuler(
+            [np.pi / 2, 0, 0]
+        )  # 90 deg around Z
+
+        # Apply the transformation
+        pybullet.resetBasePositionAndOrientation(
+            plane_id, new_position, rotation_quaternion, physicsClientId=self._server_id
+        )
+
+        self._plane = plane_id
+        return self._plane
 
     def LoadRobot(self, robot_sdf_filename=URDF_MODEL_FILENAME) -> arm_1dof.robot_arm_1dof.RobotArm1Dof:
         """Load robot from sdf file"""
