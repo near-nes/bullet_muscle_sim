@@ -36,7 +36,6 @@ class BulletArm1Dof:
 
         self._timestep = pybullet.getPhysicsEngineParameters(physicsClientId=self._server_id)['fixedTimeStep']
 
-
     def LoadPlane(self, robot_sdf_filename=PLANE_MODEL_FILENAME):
         """Load plane from sdf file"""
         plane_id = pybullet.loadURDF(fileName=robot_sdf_filename, useFixedBase=True, physicsClientId=self._server_id)
@@ -74,11 +73,44 @@ class BulletArm1Dof:
 
         return self._skel_arm
 
+    def LoadTarget(self, target_position, target_color=[1, 0, 0, 1]):
+        ball_shape = pybullet.createVisualShape(
+            shapeType=pybullet.GEOM_SPHERE,
+            radius=0.02,
+            rgbaColor=target_color,
+            physicsClientId=self._server_id,
+        )
+        ball_collision = pybullet.createCollisionShape(
+            shapeType=pybullet.GEOM_SPHERE, radius=0.02, physicsClientId=self._server_id
+        )
+        ball = pybullet.createMultiBody(
+            baseMass=0,
+            baseInertialFramePosition=[0, 0, 0],
+            baseCollisionShapeIndex=ball_collision,
+            baseVisualShapeIndex=ball_shape,
+            basePosition=target_position,
+            physicsClientId=self._server_id,
+        )
+        return ball
+        # ball_const = pybullet.createConstraint(
+        #     self._skel_arm,
+        #     4,
+        #     ball,
+        #     -1,
+        #     pybullet.JOINT_FIXED,
+        #     [0, 0, 0],
+        #     pybullet.getJointState(self._skel_arm, 4)[:2],
+        #     [0, 0, 0],
+        #     [0, 0, 0],
+        #     [0, 0, 0],
+        #     physicsClientId=self._server_id,
+        # )
+
     def Simulate(self, sim_time) -> None:
         t = 0
         while t < sim_time:
             pybullet.stepSimulation(physicsClientId=self._server_id)
-            
+
             if self._skel_muscles:
                 # Update muscle joint states
                 self._skel_arm.UpdateStats()
@@ -94,4 +126,3 @@ class BulletArm1Dof:
                 self._skel_arm.SetJointTorques(joint_ids=[0,1], torques=torques)
 
             t += self._timestep
-            
